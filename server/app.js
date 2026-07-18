@@ -9,7 +9,7 @@ const app = express();
 app.use(express.json());
 
 app.use("/", indexRoutes);
-app.use("/tasks", taskRoutes);
-app.use("/users", userRoutes);
+app.use("/api/tasks", taskRoutes);
+app.use("/api/users", userRoutes);
 
 export default app;
