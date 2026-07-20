@@ -1,7 +1,10 @@
 import Task from "../models/Task.js";
+import asyncHandler from "express-async-handler";
+import ApiError from "../utils/ApiError.js";
 
-export const createTask = async (req, res) => {
-  try {
+
+export const createTask =asyncHandler( async (req, res) => {
+  
     const { title, description, dueDate, priority, status } = req.body;
 
     const task = await Task.create({
@@ -22,16 +25,11 @@ export const createTask = async (req, res) => {
       message: "Task created successfully",
       task,
     });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
+  
+  
+});
 
-export const getAllTasks = async (req, res) => {
-  try {
+export const getAllTasks = asyncHandler(async (req, res) => {
     const tasks = await Task.find({user:req.user._id});
 
     res.status(200).json({
@@ -39,43 +37,30 @@ export const getAllTasks = async (req, res) => {
       count: tasks.length,
       tasks,
     });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
+  
+});
 
-export const getTaskById = async (req, res) => {
-  try {
-    
+export const getTaskById =asyncHandler( async (req, res) => {
+
     const task = await Task.findOne({
       _id: req.params.id,
       user: req.user._id,
     });
 
     if (!task) {
-      return res.status(404).json({
-        success: false,
-        message: "Task not found",
-      });
+      throw new ApiError(404, "Task not found");
     }
 
     res.status(200).json({
       success: true,
       task,
     });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
+ 
+  
+});
 
-export const updateTask = async (req, res) => {
-  try {
+export const updateTask = asyncHandler(async (req, res) => {
+
      
 const task = await Task.findOneAndUpdate( {
       _id: req.params.id,
@@ -87,10 +72,7 @@ const task = await Task.findOneAndUpdate( {
     
     
     if (!task) {
-      return res.status(404).json({
-        success: false,
-        message: "Task not found",
-      });
+      throw new ApiError(404, "Task not found");
     }
 
     res.status(200).json({
@@ -98,17 +80,12 @@ const task = await Task.findOneAndUpdate( {
       message: "Task updated successfully",
       task,
     });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-}
+ 
+})
 
 export const deleteTask
-  = async (req, res) => {
-    try {
+  = asyncHandler (async (req, res) => {
+  
      
       
       const task = await Task.findOneAndDelete({
@@ -117,10 +94,7 @@ export const deleteTask
       });
 
       if (!task) {
-        return res.status(404).json({
-          success: false,
-          message:"Task not found",
-        })
+        throw new ApiError(404, "Task not found");
       }
       res.status(200).json({
         success: true,
@@ -128,10 +102,5 @@ export const deleteTask
         task,
       })
 
-    } catch (error) {
-      res.status(500).json({
-        success: false,
-        message: error.message,
-      });
-   }
- }
+   
+ })
