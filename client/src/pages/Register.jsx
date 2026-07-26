@@ -1,8 +1,9 @@
 import {useContext, useState} from 'react'
-import api from '../api/axios.js';
+
 
 import { useNavigate } from 'react-router-dom';
 import AuthContext from '../context/AuthContext.jsx';
+import { registerUser } from '../api/authApi.js';
 
 
 export default function Register() {
@@ -17,14 +18,18 @@ export default function Register() {
   const handleSubmit= async(e)=> {
     e.preventDefault();
     setError("");
-    try{
-      const response = await api.post("/register", { email, name, password })
-      
+    try {
+      const userData = {
+        name,
+        email,
+        password,
+      };
+      const response = await registerUser(userData);
     
-      const { user, token } = response.data;
+      const { user, token } = response;
       login(user, token);
     
-      console.log(response.data);
+      console.log(response);
       navigate("/dashboard");
     } catch (error) {
       

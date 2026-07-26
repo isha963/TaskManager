@@ -1,13 +1,14 @@
 import { useContext } from "react";
 import AuthContext from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import  CreateTask  from "../components/CreateTask";
 
 
 export default function Dashboard() {
   const { user,logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const handleLogout = async () => {
+  const handleLogout = () => {
     
     logout();
 
@@ -20,6 +21,7 @@ export default function Dashboard() {
     <>
       <h1>Dashboard</h1>
       <h3> Welcome {user?.name}!</h3>
+      <CreateTask/>
       <button onClick={handleLogout}>logout</button>
     </>
   );
