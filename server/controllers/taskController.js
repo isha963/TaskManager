@@ -18,7 +18,7 @@ export const createTask =asyncHandler( async (req, res) => {
 
     });
 
-  
+  console.log(req.user);
 
     res.status(201).json({
       success: true,
