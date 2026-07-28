@@ -5,7 +5,7 @@ import Dashboard from './pages/Dashboard.jsx'
 import { Route, Routes } from 'react-router-dom'
 import ProtectedRoute from './routes/ProtectedRoute.jsx'
 import PublicRoute from './routes/PublicRoute.jsx'
-
+import TaskDetails from './pages/TaskDetails.jsx'
 function App() {
  
 
@@ -21,9 +21,8 @@ function App() {
         <Route
           path="/dashboard"
           element={<ProtectedRoute>{<Dashboard />}</ProtectedRoute>}
-          
-
         ></Route>
+        <Route path="/tasks/:id" element={<TaskDetails />} />
       </Routes>
     </>
   );
