@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import { createTask } from "../api/taskApi";
 
-export default function CreateTask() {
+export default function CreateTask({fetchTasks}) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [dueDate, setDueDate] = useState("");
@@ -30,6 +30,7 @@ const [error, setError] = useState("");
       setDueDate("");
       setPriority("");
       setStatus("");
+       fetchTasks()
     } catch (error) {
       setError(error.message);
       console.log(error.message);
