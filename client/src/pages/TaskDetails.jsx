@@ -4,7 +4,7 @@ import { useParams,useNavigate } from "react-router-dom";
 import { getTaskById,updateTask,deleteTask } from "../api/taskApi";
 
 export default function TaskDetails() {
-  const Navigate = useNavigate();
+  const navigate = useNavigate();
   const [task, setTask] = useState(null);
   const [formData, setFormData] = useState({
     title: "",
@@ -62,10 +62,27 @@ export default function TaskDetails() {
   };
 
   const handleDelete = async () => {
-    const response = await deleteTask(id);
-    console.log(response);
-    Navigate("/dashboard");
+
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this task?",
+    );
+
+    console.log("Confirmed:", confirmed);
+
+    if(confirmed)
+    {
+      setError("");
+      try {
+        await deleteTask(id);
+      
+        navigate("/dashboard");
+      } catch (error) {
+        setError(error.message);
+      }
+    } 
   };
+
+
   return (
     <>
       {isEditing ? (
