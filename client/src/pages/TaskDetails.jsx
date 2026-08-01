@@ -145,8 +145,9 @@ export default function TaskDetails() {
         <div>
           <h1>{task.title}</h1>
           <p>{task.description}</p>
-          <p>{task.priority}</p>
-          <p>{task.status}</p>
+          <p>Duedate: {new Date(task.dueDate).toLocaleDateString()}</p>
+          <p>Priority: {task.priority}</p>
+          <p>Status: {task.status}</p>
 
           <button onClick={handleClick}>edit</button>
           <button onClick={handleDelete}>delete</button>
