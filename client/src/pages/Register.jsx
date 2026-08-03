@@ -43,18 +43,18 @@ export default function Register() {
     <div className="flex min-h-screen items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
-          <span className="mx-auto flex h-11 w-11 items-center justify-center rounded-xl bg-[var(--color-accent)] text-sm font-bold text-white">
+          <span className="mx-auto flex h-11 w-11 items-center justify-center rounded-xl bg-accent text-sm font-bold text-white">
             TM
           </span>
-          <h1 className="mt-4 text-2xl font-bold tracking-tight text-[var(--color-ink)]">
+          <h1 className="mt-4 text-2xl font-bold tracking-tight text-ink">
             Create your account
           </h1>
-          <p className="mt-2 text-sm text-[var(--color-muted)]">
+          <p className="mt-2 text-sm text-muted">
             Join TaskManager and start organizing work.
           </p>
         </div>
 
-        <div className="rounded-2xl border border-[var(--color-line)] bg-white p-6 shadow-sm sm:p-8">
+        <div className="rounded-2xl border border-line bg-white p-6 shadow-sm sm:p-8">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label htmlFor="register-name" className={labelClass}>
@@ -116,18 +116,18 @@ export default function Register() {
             <button
               type="submit"
               disabled={submitting}
-              className="w-full rounded-lg bg-[var(--color-accent)] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[var(--color-accent-hover)] disabled:cursor-not-allowed disabled:opacity-60"
+              className="w-full rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-60"
             >
               {submitting ? "Creating account…" : "Create account"}
             </button>
           </form>
         </div>
 
-        <p className="mt-6 text-center text-sm text-[var(--color-muted)]">
+        <p className="mt-6 text-center text-sm text-muted">
           Already have an account?{" "}
           <Link
             to="/login"
-            className="font-semibold text-[var(--color-accent)] hover:text-[var(--color-accent-hover)]"
+            className="font-semibold text-accent hover:text-accent-hover"
           >
             Sign in
           </Link>

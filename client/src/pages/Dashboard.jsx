@@ -44,17 +44,17 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen">
-      <header className="border-b border-[var(--color-line)] bg-white/70 backdrop-blur-md">
+      <header className="border-b border-line bg-white/70 backdrop-blur-md">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3">
-            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--color-accent)] text-sm font-bold text-white">
+            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent text-sm font-bold text-white">
               TM
             </span>
             <div>
-              <p className="text-sm font-semibold tracking-tight text-[var(--color-ink)]">
+              <p className="text-sm font-semibold tracking-tight text-ink">
                 TaskManager
               </p>
-              <p className="text-xs text-[var(--color-muted)]">
+              <p className="text-xs text-muted">
                 Stay on top of your work
               </p>
             </div>
@@ -62,15 +62,15 @@ export default function Dashboard() {
 
           <div className="flex items-center gap-3">
             <div className="hidden text-right sm:block">
-              <p className="text-sm font-medium text-[var(--color-ink)]">
+              <p className="text-sm font-medium text-ink">
                 {user?.name}
               </p>
-              <p className="text-xs text-[var(--color-muted)]">{user?.email}</p>
+              <p className="text-xs text-muted">{user?.email}</p>
             </div>
             <button
               type="button"
               onClick={handleLogout}
-              className="rounded-lg border border-[var(--color-line)] bg-white px-3.5 py-2 text-sm font-medium text-[var(--color-ink)] transition hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+              className="rounded-lg border border-line bg-white px-3.5 py-2 text-sm font-medium text-ink transition hover:border-accent hover:text-accent"
             >
               Log out
             </button>
@@ -80,10 +80,10 @@ export default function Dashboard() {
 
       <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold tracking-tight text-[var(--color-ink)] sm:text-4xl">
+          <h1 className="text-3xl font-bold tracking-tight text-ink sm:text-4xl">
             Good to see you, {firstName}
           </h1>
-          <p className="mt-2 text-[var(--color-muted)]">
+          <p className="mt-2 text-muted">
             Create tasks, track progress, and clear your list.
           </p>
         </div>
@@ -106,12 +106,12 @@ export default function Dashboard() {
           ].map((stat) => (
             <div
               key={stat.label}
-              className="rounded-xl border border-[var(--color-line)] bg-white/80 px-4 py-4"
+              className="rounded-xl border border-line bg-white/80 px-4 py-4"
             >
-              <p className="text-xs font-medium uppercase tracking-wide text-[var(--color-muted)]">
+              <p className="text-xs font-medium uppercase tracking-wide text-muted">
                 {stat.label}
               </p>
-              <p className="mt-1 text-2xl font-bold tabular-nums text-[var(--color-ink)]">
+              <p className="mt-1 text-2xl font-bold tabular-nums text-ink">
                 {tasks === null ? "—" : stat.value}
               </p>
             </div>
