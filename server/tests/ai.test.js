@@ -86,6 +86,7 @@ describe("AI Planner API", () => {
         goal: "Prepare for a Node.js interview",
         duration: 7,
         hoursPerDay: 2,
+        experienceLevel: "Intermediate",
       });
 
     expect(response.statusCode).toBe(200);
@@ -116,6 +117,7 @@ describe("AI Planner API", () => {
         goal: "Prepare for a Node.js interview",
         duration: 7,
         hoursPerDay: 2,
+        experienceLevel: "Intermediate",
       });
 
     expect(response.statusCode).toBe(500);

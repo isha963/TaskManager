@@ -4,7 +4,7 @@ import "dotenv/config";
 import app from "./app.js";
 import connectDB from "./config/db.js";
 
-console.log("Dotenv error:", result.error);
+;
 console.log("PORT:", process.env.PORT);
 const PORT = process.env.PORT||3000;
 
