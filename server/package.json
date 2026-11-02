@@ -10,7 +10,9 @@
     "mongoose": "^9.7.4"
   },
   "devDependencies": {
-    "nodemon": "^3.1.14"
+    "jest": "^30.5.2",
+    "nodemon": "^3.1.14",
+    "supertest": "^7.3.1"
   },
   "name": "server",
   "version": "1.0.0",
