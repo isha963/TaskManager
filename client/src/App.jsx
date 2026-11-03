@@ -6,6 +6,7 @@ import { Route, Routes } from 'react-router-dom'
 import ProtectedRoute from './routes/ProtectedRoute.jsx'
 import PublicRoute from './routes/PublicRoute.jsx'
 import TaskDetails from './pages/TaskDetails.jsx'
+import AIPlanner from "./pages/AIPlanner.jsx";
 function App() {
  
 
@@ -23,6 +24,14 @@ function App() {
           element={<ProtectedRoute>{<Dashboard />}</ProtectedRoute>}
         ></Route>
         <Route path="/tasks/:id" element={<TaskDetails />} />
+        <Route
+          path="/ai-planner"
+          element={
+            <ProtectedRoute>
+              <AIPlanner />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </>
   );

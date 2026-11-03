@@ -6,6 +6,8 @@ export function AuthProvider({ children }) {
   
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
+  const [authLoading, setAuthLoading] = useState(true);
+  
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -15,7 +17,9 @@ export function AuthProvider({ children }) {
       setToken(storedToken);
       setUser(JSON.parse(storedUser));
     }
-  },[])
+
+    setAuthLoading(false);
+  }, []);
 
   const login = (userdata, jwtToken) => {
     setUser(userdata);
@@ -39,12 +43,13 @@ export function AuthProvider({ children }) {
           user,
           login,
           token,
-          logout
+          logout,
+          authLoading,
         }}
       >
         {children}
       </AuthContext.Provider>
     </>
-  )
+  );
 }
 export default AuthContext;
