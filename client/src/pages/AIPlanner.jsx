@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { generatePlan } from "../api/aiApi";
-
+import PlanReview from "../components/PlanReview"
 
 export default function AIPlanner() {
   const [formData, setFormData] = useState({
@@ -42,6 +42,7 @@ export default function AIPlanner() {
       }
       const response = await generatePlan(formData);
       setGeneratedPlan(response.plan);
+      console.log(generatedPlan);
     } catch (err) {
       if (err.response) {
       setError(
@@ -59,7 +60,6 @@ export default function AIPlanner() {
   }
     return (
       <>
-        
         <h1>AI PLanner</h1>
 
         <form onSubmit={handleSubmit}>
@@ -123,6 +123,8 @@ export default function AIPlanner() {
             {loading ? "generating..." : "Generate Plan"}
           </button>
         </form>
+
+        {generatedPlan && <PlanReview plan={generatedPlan} />}
       </>
     );
   }

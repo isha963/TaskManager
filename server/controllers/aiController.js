@@ -75,7 +75,23 @@ const allowedLevels = ["Beginner", "Intermediate", "Advanced"];
     16. For Advanced, focus on complex concepts, optimization and architectural trade-offs.
   `;
 
-  const result = await generateWithGemini(prompt);
+  let result;
+
+  try {
+    result = await generateWithGemini(prompt);
+  } catch (error) {
+   if (error.message?.includes("AI daily request limit reached")) {
+     return res.status(429).json({
+       success: false,
+       message: error.message,
+     });
+   }
+
+    return res.status(503).json({
+      success: false,
+      message: "AI service is temporarily unavailable. Please try again later.",
+    });
+  }
 
   res.status(200).json({
     success: true,

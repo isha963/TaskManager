@@ -40,7 +40,7 @@ const taskPlanSchema = {
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 export const generateWithGemini = async (prompt) => {
-  const maxAttempts = 3;
+  const maxAttempts = 2;
 
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {
@@ -57,8 +57,15 @@ export const generateWithGemini = async (prompt) => {
 
       return JSON.parse(response.output_text);
     } catch (error) {
-      const isTemporary =
-        error.status === 503 || error.status === 429 || error.status >= 500;
+      console.error("Gemini API error:", error.status, error.message);
+
+      if (error.status === 429) {
+        throw new Error(
+          "AI daily request limit reached. Please try again later.",
+        );
+      }
+
+      const isTemporary = error.status === 503 || error.status >= 500;
 
       if (!isTemporary || attempt === maxAttempts) {
         throw error;
