@@ -15,13 +15,14 @@ export default function AIPlanner() {
   const [generatedPlan, setGeneratedPlan] = useState(null);
   
 
-  const handleSubmit = async (e) => {
+   const handleSubmit = async (e) => {
     e.preventDefault();
 
     
     setError("");
-    setLoading(true);
-    setGeneratedPlan(null);
+    
+     setGeneratedPlan(null);
+     setLoading(true);
     try {
       if ( !Number.isInteger(formData.duration)||formData.duration<=0|| formData.duration >90) {
         setError("Duration must be a whole number between 1 and 90 days");
@@ -32,17 +33,17 @@ export default function AIPlanner() {
         formData.hoursPerDay < 1 ||
         formData.hoursPerDay > 24
       ) {
-        setError("Hours per day must be a whole number between 1 and 24 hours");
+        setError("Hours per day must be between 1 and 24");
         return;
       }
 
-      if (formData.goal ==="" || formData.goal.trim() ==="") {
+      if (!formData.goal.trim()) {
         setError("Goal must not be empty");
         return;
       }
       const response = await generatePlan(formData);
       setGeneratedPlan(response.plan);
-      console.log(generatedPlan);
+      console.log(response.plan);
     } catch (err) {
       if (err.response) {
       setError(

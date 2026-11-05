@@ -1,19 +1,20 @@
 import asyncHandler from "express-async-handler";
 import { generateWithGemini } from "../services/geminiService.js";
+import mongoose from "mongoose";
+import Task from "../models/Task.js";
 
 export const generateTaskPlan = asyncHandler(async (req, res) => {
   const { goal, duration, hoursPerDay, experienceLevel } = req.body;
-const allowedLevels = ["Beginner", "Intermediate", "Advanced"];
+  const allowedLevels = ["Beginner", "Intermediate", "Advanced"];
   // Validate input
 
-  
-    if (!allowedLevels.includes(experienceLevel)) {
-      return res.status(400).json({
-        success: false,
-        message:"please enter correct experience level", 
-     })
-   }
- 
+  if (!allowedLevels.includes(experienceLevel)) {
+    return res.status(400).json({
+      success: false,
+      message: "please enter correct experience level",
+    });
+  }
+
   if (
     typeof goal !== "string" ||
     !goal.trim() ||
@@ -31,7 +32,6 @@ const allowedLevels = ["Beginner", "Intermediate", "Advanced"];
     });
   }
 
-  
   // Get today's date in India
   const startDate = new Intl.DateTimeFormat("en-CA", {
     timeZone: "Asia/Kolkata",
@@ -80,12 +80,12 @@ const allowedLevels = ["Beginner", "Intermediate", "Advanced"];
   try {
     result = await generateWithGemini(prompt);
   } catch (error) {
-   if (error.message?.includes("AI daily request limit reached")) {
-     return res.status(429).json({
-       success: false,
-       message: error.message,
-     });
-   }
+    if (error.message?.includes("AI daily request limit reached")) {
+      return res.status(429).json({
+        success: false,
+        message: error.message,
+      });
+    }
 
     return res.status(503).json({
       success: false,
@@ -97,4 +97,95 @@ const allowedLevels = ["Beginner", "Intermediate", "Advanced"];
     success: true,
     plan: result,
   });
+});
+
+export const approvePlan = asyncHandler(async (req, res) => {
+  const { tasks } = req.body;
+
+  if (!Array.isArray(tasks) || tasks.length === 0) {
+    return res.status(400).json({
+      success: false,
+      message: "Please provide at least one task.",
+    });
+  }
+
+  
+  for (const task of tasks) {
+    if (!task || typeof task !== "object" || Array.isArray(task)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid task data.",
+      });
+    }
+
+    const validSubtasks =
+      Array.isArray(task.subtasks) &&
+      task.subtasks.every(
+        (subtask) =>
+          subtask &&
+          typeof subtask.title === "string" &&
+          subtask.title.trim() !== "" &&
+          typeof subtask.completed === "boolean",
+      );
+
+    const validDate =
+      typeof task.dueDate === "string" &&
+      /^\d{4}-\d{2}-\d{2}$/.test(task.dueDate) &&
+      !Number.isNaN(Date.parse(task.dueDate)) &&
+      new Date(task.dueDate).toISOString().slice(0, 10) === task.dueDate;
+
+    if (
+      typeof task.title !== "string" ||
+      !task.title.trim() ||
+      typeof task.description !== "string" ||
+      !task.description.trim() ||
+      !["Low", "Medium", "High"].includes(task.priority) ||
+      !validDate ||
+      !validSubtasks
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "One or more tasks contain invalid data.",
+      });
+    }
+  }
+  
+  const session = await mongoose.startSession();
+
+  try {
+   await session.startTransaction();
+    const savedTasks = [];
+
+    for (const task of tasks) {
+     
+
+    
+      const newTask = await Task.create(
+        [
+          {
+            ...task,
+            user: req.user._id,
+          },
+        ],
+        { session },
+      );
+
+      savedTasks.push(newTask[0]);
+      
+    }
+
+    await session.commitTransaction();
+
+    return res.status(201).json({
+      success: true,
+      message: "AI plan approved successfully",
+      count: savedTasks.length,
+      tasks: savedTasks,
+    });
+  } catch (error) {
+    await session.abortTransaction();
+    throw error;
+  } finally {
+    await session.endSession();
+  }
 });
