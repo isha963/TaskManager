@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { approvePlan } from "../api/aiApi";
 
-export default function PlanReview({ plan }) {
+export default function PlanReview({ plan , approvalToken}) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -14,7 +14,7 @@ const [isApproved, setIsApproved] = useState(false);
     setSuccess("");
 
     try {
-      const response = await approvePlan(plan.tasks);
+      const response = await approvePlan(plan.tasks, approvalToken);
       setSuccess(response.message);
       setIsApproved(true);
     } catch (err) {

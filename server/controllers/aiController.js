@@ -2,6 +2,9 @@ import asyncHandler from "express-async-handler";
 import { generateWithGemini } from "../services/geminiService.js";
 import mongoose from "mongoose";
 import Task from "../models/Task.js";
+import { randomBytes } from "crypto";
+import PlanApproval from "../models/PlanApproval.js";
+
 
 export const generateTaskPlan = asyncHandler(async (req, res) => {
   const { goal, duration, hoursPerDay, experienceLevel } = req.body;
@@ -76,14 +79,21 @@ export const generateTaskPlan = asyncHandler(async (req, res) => {
   `;
 
   let result;
-
+let approvalToken;
   try {
     result = await generateWithGemini(prompt);
+    approvalToken = randomBytes(32).toString("hex");
+
+    await PlanApproval.create({
+      user: req.user._id,
+      token: approvalToken,
+    });
   } catch (error) {
     if (error.message?.includes("AI daily request limit reached")) {
       return res.status(429).json({
         success: false,
         message: error.message,
+        
       });
     }
 
@@ -96,11 +106,20 @@ export const generateTaskPlan = asyncHandler(async (req, res) => {
   res.status(200).json({
     success: true,
     plan: result,
+    approvalToken,
   });
 });
 
 export const approvePlan = asyncHandler(async (req, res) => {
-  const { tasks } = req.body;
+  const { tasks, approvalToken } = req.body;
+  if (!approvalToken || typeof approvalToken !== "string") {
+    return res.status(400).json({
+      success: false,
+      message: "Invalid or missing approval token.",
+    });
+  }
+
+  
 
   if (!Array.isArray(tasks) || tasks.length === 0) {
     return res.status(400).json({
@@ -153,7 +172,31 @@ export const approvePlan = asyncHandler(async (req, res) => {
   const session = await mongoose.startSession();
 
   try {
-   await session.startTransaction();
+    await session.startTransaction();
+    const updatedApproval = await PlanApproval.findOneAndUpdate(
+      {
+        token: approvalToken,
+        user: req.user._id,
+        used: false,
+      },
+      {
+        $set: { used: true },
+      },
+      {
+        new: true,
+        session,
+      },
+    );
+
+    if (!updatedApproval) {
+      await session.abortTransaction();
+
+      return res.status(400).json({
+        success: false,
+        message: "This plan has already been approved or the token is invalid.",
+      });
+    }
+
     const savedTasks = [];
 
     for (const task of tasks) {

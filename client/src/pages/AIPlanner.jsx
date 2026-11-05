@@ -13,16 +13,16 @@ export default function AIPlanner() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [generatedPlan, setGeneratedPlan] = useState(null);
-  
+  const [approvalToken, setApprovalToken] = useState(null);
 
    const handleSubmit = async (e) => {
     e.preventDefault();
 
     
     setError("");
-    
+    setApprovalToken(null);
      setGeneratedPlan(null);
-     setLoading(true);
+    
     try {
       if ( !Number.isInteger(formData.duration)||formData.duration<=0|| formData.duration >90) {
         setError("Duration must be a whole number between 1 and 90 days");
@@ -41,7 +41,9 @@ export default function AIPlanner() {
         setError("Goal must not be empty");
         return;
       }
+       setLoading(true);
       const response = await generatePlan(formData);
+      setApprovalToken(response.approvalToken);
       setGeneratedPlan(response.plan);
       console.log(response.plan);
     } catch (err) {
@@ -125,7 +127,9 @@ export default function AIPlanner() {
           </button>
         </form>
 
-        {generatedPlan && <PlanReview plan={generatedPlan} />}
+        {generatedPlan && (
+          <PlanReview plan={generatedPlan} approvalToken={approvalToken} />
+        )}
       </>
     );
   }
