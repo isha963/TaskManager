@@ -118,6 +118,32 @@ export default function Dashboard() {
           ))}
         </section>
 
+        <section className="mb-8 overflow-hidden rounded-2xl border border-line bg-white shadow-sm">
+          <div className="flex flex-col gap-5 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+            <div className="flex items-start gap-4">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-accent text-sm font-bold text-white">
+                AI
+              </span>
+              <div>
+                <h2 className="text-lg font-semibold tracking-tight text-ink">
+                  AI Planner
+                </h2>
+                <p className="mt-1 max-w-xl text-sm text-muted">
+                  Describe a goal and get a structured plan you can review
+                  and approve into tasks.
+                </p>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => navigate("/ai-planner")}
+              className="w-full shrink-0 rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-accent-hover sm:w-auto"
+            >
+              Open planner
+            </button>
+          </div>
+        </section>
+
         <div className="grid gap-8 lg:grid-cols-[minmax(0,22rem)_1fr] lg:items-start">
           <aside>
             <CreateTask fetchTasks={fetchTasks} />
