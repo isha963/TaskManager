@@ -10,12 +10,20 @@ import cors from "cors";
 const app = express();
 
 app.use(express.json());
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://taskmanager-xctc.onrender.com",
+];
+
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: allowedOrigins,
     credentials: true,
   }),
 );
+
+
+
 app.use("/api/ai", aiRoutes);
 app.use("/", indexRoutes);
 app.use("/api/tasks", taskRoutes);
