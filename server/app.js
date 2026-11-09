@@ -12,7 +12,7 @@ const app = express();
 app.use(express.json());
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://taskmanager-xctc.onrender.com",
+  "https://taskmanager-app-4k33.onrender.com",
 ];
 
 app.use(
