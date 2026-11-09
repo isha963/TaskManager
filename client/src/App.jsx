@@ -13,6 +13,7 @@ function App() {
   return (
     <>
       <Routes>
+        <Route path="/" eelement={<PublicRoute>{<Login />}</PublicRoute>} />
         <Route
           path="/login"
           element={<PublicRoute>{<Login />}</PublicRoute>}
