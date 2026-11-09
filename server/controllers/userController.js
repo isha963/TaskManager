@@ -62,6 +62,7 @@ export const loginUser =asyncHandler( async (req, res) => {
     expiresIn: "7d",
   });
 
+  
   res.status(200).json({
     success: true,
     message: "login successful",

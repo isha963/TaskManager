@@ -5,12 +5,13 @@ import ApiError from "../utils/ApiError.js";
 
 export const createTask =asyncHandler( async (req, res) => {
   
-    const { title, description, dueDate, priority, status } = req.body;
+    const { title, description, subtasks,dueDate, priority, status } = req.body;
 
     const task = await Task.create({
 
       title,
       description,
+      subtasks,
       dueDate,
       priority,
       status,
